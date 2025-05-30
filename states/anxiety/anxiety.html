@@ -4,14 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Did You Forget Something?</title>
+    
+    <!-- Preload eye images -->
+    <link rel="preload" href="../assets/eyeopen.png" as="image">
+    <link rel="preload" href="../assets/eyeclosed.png" as="image">
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload the background -->
+    <style>
+        .preload-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: url('../assets/eyeopen.png') repeat;
+            background-size: 100px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
 </head>
 <body>
     <div class="cursor-outer"></div>
     <div class="cursor-inner"></div>
+    
+    <!-- Preloaded background -->
+    <div class="preload-background"></div>
     
     <!-- Hero Section -->
     <section id="hero" class="section">

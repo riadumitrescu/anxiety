@@ -1,26 +1,83 @@
-// Custom cursor with trailing effect
-const cursor = document.querySelector('.cursor-overlay');
-const cursorTrails = [];
-const maxTrails = 5;
+// Preload images
+const eyeImages = [
+    '../assets/eyeopen.png',
+    '../assets/eyeclosed.png'
+];
 
-for (let i = 0; i < maxTrails; i++) {
-    const trail = cursor.cloneNode();
-    trail.style.opacity = (1 - i / maxTrails) * 0.3;
-    document.body.appendChild(trail);
-    cursorTrails.push(trail);
+Promise.all(eyeImages.map(src => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = resolve;
+        img.onerror = reject;
+    });
+})).then(() => {
+    document.body.classList.add('images-loaded');
+}).catch(error => {
+    console.error('Error loading images:', error);
+});
+
+// Custom cursor implementation
+const cursorOuter = document.querySelector('.cursor-outer');
+const cursorInner = document.querySelector('.cursor-inner');
+
+// Track cursor state
+let cursorX = 0;
+let cursorY = 0;
+let targetX = 0;
+let targetY = 0;
+
+// Smooth cursor movement
+function updateCursor() {
+    // Smoothly interpolate cursor position
+    cursorX += (targetX - cursorX) * 0.1;
+    cursorY += (targetY - cursorY) * 0.1;
+    
+    if (cursorOuter) {
+        cursorOuter.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(${cursorOuter.dataset.scale || 1})`;
+    }
+    if (cursorInner) {
+        cursorInner.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+    }
+    
+    requestAnimationFrame(updateCursor);
 }
 
+// Start cursor animation
+updateCursor();
+
+// Update cursor target position
 document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    targetX = e.pageX;
+    targetY = e.pageY;
+});
+
+// Handle cursor visibility
+document.addEventListener('mouseenter', () => {
+    if (cursorOuter) cursorOuter.style.opacity = '1';
+    if (cursorInner) cursorInner.style.opacity = '1';
+});
+
+document.addEventListener('mouseleave', () => {
+    if (cursorOuter) cursorOuter.style.opacity = '0';
+    if (cursorInner) cursorInner.style.opacity = '0';
+});
+
+// Add hover states for clickable elements
+document.querySelectorAll('button, input, a').forEach(elem => {
+    elem.addEventListener('mouseenter', () => {
+        if (cursorOuter) {
+            cursorOuter.dataset.scale = '1.5';
+            cursorOuter.style.mixBlendMode = 'hard-light';
+        }
+    });
     
-    // Update trails with delay
-    setTimeout(() => {
-        cursorTrails.forEach((trail, index) => {
-            trail.style.left = e.clientX + 'px';
-            trail.style.top = e.clientY + 'px';
-        });
-    }, 50 * (index + 1));
+    elem.addEventListener('mouseleave', () => {
+        if (cursorOuter) {
+            cursorOuter.dataset.scale = '1';
+            cursorOuter.style.mixBlendMode = 'difference';
+        }
+    });
 });
 
 // Avoid button with more complex avoidance
@@ -42,24 +99,30 @@ document.addEventListener('mousemove', (e) => {
             Math.pow(mouseY - buttonCenterY, 2)
         );
         
-        if (distance < 100) {
+        if (distance < 150) { // Increased detection radius
             isAvoiding = true;
             avoidanceCount++;
             
             const angle = Math.atan2(mouseY - buttonCenterY, mouseX - buttonCenterX);
-            const avoidDistance = 100 + (avoidanceCount * 10);
-            const newX = buttonCenterX - Math.cos(angle) * avoidDistance;
-            const newY = buttonCenterY - Math.sin(angle) * avoidDistance;
+            const avoidDistance = 150 + (avoidanceCount * 20); // Increased movement distance
             
-            avoidButton.style.transform = `translate(${newX - buttonCenterX}px, ${newY - buttonCenterY}px) rotate(${Math.random() * 10 - 5}deg)`;
+            let newX = buttonCenterX - Math.cos(angle) * avoidDistance;
+            let newY = buttonCenterY - Math.sin(angle) * avoidDistance;
+            
+            // Keep button within viewport
+            newX = Math.max(rect.width/2, Math.min(window.innerWidth - rect.width/2, newX));
+            newY = Math.max(rect.height/2, Math.min(window.innerHeight - rect.height/2, newY));
+            
+            avoidButton.style.transition = 'transform 0.2s ease-out';
+            avoidButton.style.transform = `translate(${newX - buttonCenterX}px, ${newY - buttonCenterY}px) rotate(${Math.random() * 20 - 10}deg)`;
             
             if (avoidanceCount > 5) {
-                avoidButton.textContent = "You can't catch me";
+                avoidButton.textContent = "You can't catch me!";
             }
             
             setTimeout(() => {
                 isAvoiding = false;
-            }, 500);
+            }, 200);
         }
     }
 });
@@ -80,12 +143,14 @@ if (anxietyInput) {
     ];
     
     anxietyInput.addEventListener('focus', () => {
-        setInterval(() => {
+        const interval = setInterval(() => {
             anxietyInput.placeholder = alternativePlaceholders[Math.floor(Math.random() * alternativePlaceholders.length)];
         }, 2000);
+        anxietyInput.dataset.interval = interval;
     });
     
     anxietyInput.addEventListener('blur', () => {
+        clearInterval(Number(anxietyInput.dataset.interval));
         anxietyInput.placeholder = originalPlaceholder;
     });
     
@@ -116,7 +181,8 @@ if (anxietyForm) {
         anxietyInput.value = '';
         
         const submitButton = anxietyForm.querySelector('button[type="submit"]');
-        submitButton.style.opacity = '0';
+        submitButton.disabled = true;
+        submitButton.classList.add('error');
         
         const errorMessages = [
             "Too late.",
@@ -126,43 +192,63 @@ if (anxietyForm) {
             "Start over."
         ];
         
+        // Add glitch effect to the error message
+        errorMessage.style.animation = 'textGlitch 0.3s infinite';
+        
         setTimeout(() => {
             submitButton.textContent = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-            submitButton.style.opacity = '1';
             document.body.classList.add('heavy-shake');
-            setTimeout(() => document.body.classList.remove('heavy-shake'), 1000);
-        }, 1000);
+            
+            // Intensify the shake
+            shakeIntensity = Math.min(shakeIntensity + 1, 5);
+            document.documentElement.style.setProperty('--shake-intensity', shakeIntensity);
+            
+            setTimeout(() => {
+                document.body.classList.remove('heavy-shake');
+                submitButton.disabled = false;
+                submitButton.classList.remove('error');
+                errorMessage.style.animation = '';
+            }, 2000);
+        }, 500);
     });
 }
 
 // Enhanced time-based escalation
 let anxietyLevel = 0;
 const maxAnxietyLevel = 10;
+let isPageVisible = true;
+let shakeIntensity = 0;
 
-function addShake() {
-    document.body.classList.add('heavy-shake');
-    setTimeout(() => {
-        document.body.classList.remove('heavy-shake');
-    }, 1000);
+// Handle page visibility
+document.addEventListener('visibilitychange', () => {
+    isPageVisible = !document.hidden;
+});
+
+function updateShakeIntensity() {
+    if (!isPageVisible) return;
+    
+    // Gradually increase shake intensity
+    shakeIntensity = Math.min(shakeIntensity + 0.1, 5);
+    document.documentElement.style.setProperty('--shake-intensity', shakeIntensity);
 }
 
 function escalateAnxiety() {
+    if (!isPageVisible) return;
     anxietyLevel = Math.min(anxietyLevel + 1, maxAnxietyLevel);
     
     // Apply effects based on anxiety level
     document.body.style.filter = `contrast(${1 + anxietyLevel * 0.05})`;
     document.documentElement.style.setProperty('--anxiety-red', `hsl(0, ${50 + anxietyLevel * 5}%, 50%)`);
     
-    if (anxietyLevel >= 3) {
-        document.body.classList.add('light-shake');
-    }
-    
-    if (anxietyLevel >= 6) {
-        document.body.classList.remove('light-shake');
-        addShake();
+    // Start with light shake and progress to heavy
+    if (anxietyLevel >= 2) {
+        document.body.classList.add('continuous-shake');
+        updateShakeIntensity();
     }
 }
 
+// Update shake intensity more frequently than anxiety level
+setInterval(updateShakeIntensity, 1000);
 setInterval(escalateAnxiety, 3000);
 
 // Enhanced audio
@@ -261,33 +347,4 @@ function applyRandomGlitch() {
     }
 }
 
-setInterval(applyRandomGlitch, 5000);
-
-// Enhanced cursor handling
-const cursorOuter = document.querySelector('.cursor-outer');
-const cursorInner = document.querySelector('.cursor-inner');
-
-document.addEventListener('mousemove', (e) => {
-    // Update outer cursor with lag
-    requestAnimationFrame(() => {
-        cursorOuter.style.left = e.clientX - 15 + 'px';
-        cursorOuter.style.top = e.clientY - 15 + 'px';
-    });
-    
-    // Update inner cursor immediately
-    cursorInner.style.left = e.clientX - 4 + 'px';
-    cursorInner.style.top = e.clientY - 4 + 'px';
-});
-
-// Add hover states for clickable elements
-document.querySelectorAll('button, input, a').forEach(elem => {
-    elem.addEventListener('mouseenter', () => {
-        cursorOuter.style.transform = 'scale(1.5)';
-        cursorOuter.style.mixBlendMode = 'hard-light';
-    });
-    
-    elem.addEventListener('mouseleave', () => {
-        cursorOuter.style.transform = 'scale(1)';
-        cursorOuter.style.mixBlendMode = 'difference';
-    });
-}); 
+setInterval(applyRandomGlitch, 5000); 
