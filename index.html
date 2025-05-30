@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental States Journal</title>
+    <style>
+        :root {
+            --cream: #f6f1e6;
+            --ink: #2f2f2f;
+            --anxiety-color: #ff4d4d;
+            --dissociation-color: #4d94ff;
+            --depression-color: #6b4dff;
+            --mania-color: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+            line-height: 1.6;
+            background-image: 
+                linear-gradient(to right, transparent 0%, transparent 49%, #e5e0d5 49%, #e5e0d5 51%, transparent 51%, transparent 100%),
+                linear-gradient(var(--cream) 0.1em, transparent 0.1em);
+            background-size: 100% 1.5em;
+        }
+
+        .journal {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+        }
+
+        .journal::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e0d5c5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-family: 'Times New Roman', serif;
+            color: var(--ink);
+            text-align: center;
+            font-style: italic;
+        }
+
+        .warning {
+            font-size: 0.9rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 1px solid #e0d5c5;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .states {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .state-link {
+            text-decoration: none;
+            font-size: 1.8rem;
+            padding: 1rem;
+            text-align: right;
+            color: var(--ink);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+
+        .state-link:hover {
+            border-bottom-color: currentColor;
+            padding-right: 2rem;
+        }
+
+        .anxiety { color: var(--anxiety-color); }
+        .dissociation { color: var(--dissociation-color); }
+        .depression { color: var(--depression-color); }
+        .mania { color: var(--mania-color); }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.8rem;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .state-link {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="journal">
+        <h1>States of Mind</h1>
+        
+        <div class="warning">
+            ⚠️ These experiences may be intense. Proceed with caution.
+        </div>
+
+        <div class="states">
+            <a href="states/anxiety/anxiety.html" class="state-link anxiety">anxiety</a>
+            <a href="#" class="state-link dissociation">dissociation</a>
+            <a href="#" class="state-link depression">depression</a>
+            <a href="#" class="state-link mania">mania</a>
+        </div>
+
+        <footer>
+            for educational purposes only
+        </footer>
+    </div>
+</body>
+</html> 

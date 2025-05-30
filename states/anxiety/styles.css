@@ -1,0 +1,388 @@
+/* Base Styles */
+:root {
+    --bg-color: #f2f2f2;
+    --text-color: #1a1a1a;
+    --anxiety-red: #ff4d4d;
+    --font-mono: 'Space Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none !important;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Custom Cursor */
+.cursor-outer {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--anxiety-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: width 0.2s, height 0.2s;
+    animation: cursorJitter 0.3s infinite;
+}
+
+.cursor-inner {
+    width: 8px;
+    height: 8px;
+    background-color: var(--anxiety-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+}
+
+/* Hover states for cursor */
+button:hover ~ .cursor-outer,
+input:hover ~ .cursor-outer,
+a:hover ~ .cursor-outer {
+    width: 40px;
+    height: 40px;
+    mix-blend-mode: hard-light;
+}
+
+/* Sections */
+.section {
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.section:hover {
+    filter: contrast(1.05);
+}
+
+/* Hero Section */
+#hero {
+    overflow: hidden;
+}
+
+.eyes-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: url('../assets/eyeopen.png') repeat;
+    background-size: 100px;  /* Make eyes larger */
+    opacity: 0.15;
+    animation: eyesBlink 4s infinite, eyesMove 20s infinite linear;
+    transform-origin: center;
+}
+
+.eyes-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    background-size: 80px;  /* Slightly smaller second layer */
+    opacity: 0.1;
+    animation: eyesBlink 3.5s infinite, eyesMoveReverse 15s infinite linear;
+    transform: rotate(45deg);
+}
+
+.glitch-text {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: textGlitch 3s infinite;
+    position: relative;
+    text-shadow: 2px 2px var(--anxiety-red);
+    letter-spacing: -1px;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: glitchLayers 4s infinite;
+}
+
+.glitch-text::before {
+    color: var(--anxiety-red);
+    z-index: -1;
+}
+
+.glitch-text::after {
+    color: cyan;
+    z-index: -2;
+}
+
+.avoid-button {
+    padding: 1rem 2rem;
+    font-family: var(--font-mono);
+    background: transparent;
+    border: 2px solid var(--text-color);
+    cursor: none;
+    position: relative;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+.avoid-button:hover {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: var(--anxiety-red);
+    transform: scale(1.05);
+}
+
+/* Loop Section */
+.loop-container {
+    width: 100%;
+    max-width: 600px;
+    perspective: 1000px;
+}
+
+.loop-block {
+    margin: 2rem 0;
+    padding: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.loop-block:hover {
+    transform: translateZ(20px) rotateX(2deg);
+    border-color: var(--anxiety-red);
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--anxiety-red);
+    border-radius: 50%;
+    animation: spin 1s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+/* Form Section */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+#anxiety-input {
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    border: 2px solid var(--text-color);
+    margin-bottom: 1rem;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+#anxiety-input:focus {
+    outline: none;
+    border-color: var(--anxiety-red);
+    box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
+    transform: scale(1.01);
+}
+
+.error-message {
+    color: var(--anxiety-red);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Collapse Section */
+#collapse {
+    background: var(--bg-color);
+    position: relative;
+}
+
+.collapse-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    padding: 4rem 2rem;
+}
+
+.final-text {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--anxiety-red);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    animation: textGlitch 3s infinite;
+    opacity: 0.9;
+}
+
+.fake-link {
+    color: var(--text-color);
+    text-decoration: none;
+    pointer-events: none;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    animation: textGlitch 4s infinite;
+    transition: opacity 0.3s ease;
+}
+
+.fake-link:hover {
+    opacity: 0.3;
+}
+
+/* Audio Control */
+.audio-control {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+}
+
+#toggle-audio {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: none;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    filter: grayscale(1);
+}
+
+#toggle-audio:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* Enhanced Animations */
+@keyframes textGlitch {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px) skew(2deg); }
+    40% { transform: translate(2px, -2px) skew(-2deg); }
+    60% { transform: translate(-2px, -2px) skew(1deg); }
+    80% { transform: translate(2px, 2px) skew(-1deg); }
+}
+
+@keyframes cursorJitter {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(-2px, 2px);
+    }
+    50% {
+        transform: translate(2px, -2px);
+    }
+    75% {
+        transform: translate(-1px, -1px);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes eyesBlink {
+    0%, 45%, 55%, 100% {
+        background-image: url('../assets/eyeopen.png');
+        filter: brightness(1);
+    }
+    50% {
+        background-image: url('../assets/eyeclosed.png');
+        filter: brightness(0.8);
+    }
+}
+
+@keyframes eyesMove {
+    0% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(10px) translateY(-10px); }
+    50% { transform: translateX(0) translateY(0); }
+    75% { transform: translateX(-10px) translateY(10px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes eyesMoveReverse {
+    0% { transform: rotate(45deg) translateX(0) translateY(0); }
+    25% { transform: rotate(45deg) translateX(-10px) translateY(10px); }
+    50% { transform: rotate(45deg) translateX(0) translateY(0); }
+    75% { transform: rotate(45deg) translateX(10px) translateY(-10px); }
+    100% { transform: rotate(45deg) translateX(0) translateY(0); }
+}
+
+@keyframes glitchLayers {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(2px, 2px); }
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes linkGlitch {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(0); }
+    51% { transform: translateX(100%); }
+}
+
+/* Site Shake Animation */
+@keyframes siteShake {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0);
+    }
+    25% {
+        transform: translate(-5px, -5px) rotate(-1deg);
+    }
+    50% {
+        transform: translate(5px, 5px) rotate(1deg);
+    }
+    75% {
+        transform: translate(-3px, 3px) rotate(-0.5deg);
+    }
+}
+
+/* Escalation Classes */
+.light-shake {
+    animation: siteShake 0.5s infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.heavy-shake {
+    animation: siteShake 0.2s infinite;
+    animation-timing-function: linear;
+} 

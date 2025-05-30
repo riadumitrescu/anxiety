@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Did You Forget Something?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
+    
+    <!-- Hero Section -->
+    <section id="hero" class="section">
+        <div class="eyes-background"></div>
+        <div class="eyes-overlay"></div>
+        <h1 class="glitch-text" data-text="Did you forget something?">Did you forget something?</h1>
+        <button class="avoid-button" data-text="Click here to remember">Click here to remember</button>
+    </section>
+
+    <!-- Loop Section -->
+    <section id="loop" class="section">
+        <div class="loop-container">
+            <div class="loop-block" data-text="Loading...">
+                <div class="spinner"></div>
+                <p class="loading-text">Loading...</p>
+            </div>
+            <div class="loop-block" data-text="Almost there...">
+                <div class="spinner"></div>
+                <p class="loading-text">Almost there...</p>
+            </div>
+            <div class="loop-block" data-text="Just one more step...">
+                <div class="spinner"></div>
+                <p class="loading-text">Just one more step...</p>
+            </div>
+            <div class="loop-block" data-text="Oops. Try again.">
+                <div class="spinner"></div>
+                <p class="loading-text">Oops. Try again.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section id="form" class="section">
+        <div class="form-container">
+            <h2 class="glitch-text" data-text="Let's Fix It">Let's Fix It</h2>
+            <form id="anxiety-form" autocomplete="off">
+                <div class="input-group">
+                    <input type="text" id="anxiety-input" placeholder="Enter your name..." data-placeholder="Are you sure that's your name?">
+                    <p class="error-message" data-text="That's not right. Try again.">That's not right. Try again.</p>
+                </div>
+                <button type="submit" class="glitch-button" data-text="Submit">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Collapse Section -->
+    <section id="collapse" class="section">
+        <div class="collapse-content">
+            <h2 class="final-text" data-text="There is no way out">There is no way out</h2>
+            <span class="fake-link" data-text="Try again later">Try again later</span>
+        </div>
+    </section>
+
+    <div class="audio-control">
+        <button id="toggle-audio" aria-label="Toggle Audio">🔇</button>
+    </div>
+
+    <a href="../../index.html" class="home-link" style="position: fixed; top: 20px; left: 20px; color: var(--anxiety-red); text-decoration: none; font-family: var(--font-mono); opacity: 0.7; z-index: 1000;">← Back to States</a>
+
+    <script src="script.js"></script>
+</body>
+</html> 

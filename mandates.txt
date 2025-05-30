@@ -1,0 +1,51 @@
+ANXIETY HOMEPAGE - CORE MANDATES
+
+Design Principles
+----------------
+1. The site must feel visceral and emotionally impactful
+2. Every interaction should contribute to anxiety simulation
+3. The experience should escalate over time
+4. Visual elements should be intentionally unsettling
+5. Audio should enhance the psychological impact
+
+Required Features
+---------------
+1. Blinking eyes background using provided assets
+2. Cursor avoidance mechanics
+3. Form input manipulation
+4. Progressive screen shake
+5. Audio feedback (optional for user)
+6. Scroll resistance
+7. Time-based escalation
+
+Technical Requirements
+--------------------
+1. Responsive design
+2. Performance optimization
+3. Clean, maintainable code
+4. Cross-browser compatibility
+5. Graceful degradation
+
+User Experience Guidelines
+------------------------
+1. Allow users to exit/stop the experience
+2. Maintain readability despite effects
+3. Keep performance smooth
+4. Ensure all interactions feel intentional
+5. Create a sense of being trapped/watched
+
+Content Guidelines
+----------------
+1. Text should be minimal but impactful
+2. Messages should create uncertainty
+3. Error messages should be unsettling
+4. Visual hierarchy should feel unstable
+5. Colors should enhance anxiety
+
+Accessibility Considerations
+-------------------------
+1. Provide warnings for sensitive users
+2. Allow disabling of intense animations
+3. Ensure text remains readable
+4. Provide alternative experiences
+5. Allow audio control 
